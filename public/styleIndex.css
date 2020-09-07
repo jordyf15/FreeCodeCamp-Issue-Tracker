@@ -1,0 +1,52 @@
+body{
+    margin: 0px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #485460;
+}
+.fa{
+    border:none;
+    background: none;
+}
+#container{
+    width: 100vw;
+}
+.form-elements{
+    background-color: #808e9b;
+    border: solid;
+    border-color: #1e272e;
+    display: grid;
+    justify-items: center;
+    padding: 10px 0px 10px 0px;
+    row-gap: 10px;
+    width: 20vw;
+    margin-bottom: 0px;
+}
+#form-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+#delete-project{
+    border-top: none;
+}
+#view-projects{
+    border-top: none;
+}
+#project-issue{
+    border-top: none;
+}
+#delete-issue{
+    border-top: none;
+}
+#info-container{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+#footer{
+    text-align: center;
+}

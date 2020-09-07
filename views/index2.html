@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>Jordy's Issue Tracker</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/public/styleIndex.css">
+</head>
+<body>
+    <div id="header">
+        <h1>Jordy's FreeCodeCamp Issue Tracker</h1>
+    </div>
+    <div id="container">
+        <div id="form-container">
+            <div id="form-project-container">
+                <form class="form-elements" id="create-project">
+                    <a>Create New Project</a>
+                    <input type="text" placeholder="*Project Name" name="project_name" required>
+                    <button type="submit">Submit</button>
+                </form>
+                <form class="form-elements" id="delete-project">
+                    <a>Delete a Project</a>
+                    <input type="text" placeholder="name" name="project_name" required>
+                    <button type="submit">Delete</button>
+                </form>
+                <form class="form-elements" id="project-issue">
+                    <a>View Project's Issue</a>
+                    <input type="text" placeholder="name" name="project_name" required>
+                    <button>View</button>
+                </form>
+                <div class="form-elements" id="view-projects">
+                    <a>View All Projects</a>
+                    <button>View Projects</button>
+                </div>
+            </div>
+            <div id="form-issue-container1">
+                <form class="form-elements" id="submit-issue">
+                    <a>Submit issue form</a>
+                    <input type="text" id="project_name_submit" placeholder="*Project Name" name="project_name" required>
+                    <input type="text" placeholder="*Issue Title" name="issue_title" required>
+                    <input type="text" placeholder="*Text" name="issue_text" required>
+                    <input type="text" placeholder="*Created by" name="created_by" required>
+                    <input type="text" placeholder="(opt)Assigned to" name="assigned_to">
+                    <input type="text" placeholder="(opt)Status text" name="status_text">
+                    <button type="submit">Submit</button>
+                </form>
+                <form class="form-elements" id="delete-issue">
+                    <a>Delete Issue Form</a>
+                    <input type="text" id="project_name_delete" placeholder="*Project Name" name="project_name" required>
+                    <input type="text" placeholder="*_id" name="issue_id" required>
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+            <div id="form-issue-container2">
+                <form class="form-elements" id="update-issue">
+                    <a>Update Issue Form</a>
+                    <input type="text" id="project_name_update" placeholder="*Project Name" name="project_name" required>
+                    <input type="text" placeholder="*_id" name="issue_id" required>
+                    <input type="text" placeholder="(opt)Title" name="issue_title">
+                    <input type="text" placeholder="(opt)Text" name="issue_text">
+                    <input type="text" placeholder="(opt)Created by" name="created_by">
+                    <input type="text" placeholder="(opt)Assigned to" name="assigned_to">
+                    <input type="text" placeholder="(opt)Status text" name="status_text">
+                    <div><input type="checkbox" name="open">Check to close issue</input></div>
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+        <div id="info-container">
+            <div>Result: </div><br>
+            <code id="jsonResult"></code>
+        </div>
+    </div>
+    <div id="footer">
+    Created by <a href="https://www.freecodecamp.org/jordyf">Jordy Ferdian</a>  
+      <button onclick="location.href='https://github.com/jordyf15'" class="fa fa-github fa-lg"></button>
+      <button onclick="location.href='https://www.linkedin.com/in/jordy-ferdian-3606041a7'" class="fa fa-linkedin-square fa-lg"></button><br>
+      For FreeCodeCamp <a href="https://www.freecodecamp.org/learn/quality-assurance/quality-assurance-projects/issue-tracker">
+          Issue Tracker</a> project
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" 
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+    crossorigin="anonymous"></script>
+    <script>
+        //mungkin id test forms bwt issue hrs diganti bwt test
+        $('#create-project').on('submit',(e)=>{
+            e.preventDefault();//prevent the page from reloading so the jsonResult can be seen
+            $.ajax({
+                url: '/api/project',
+                type: 'post',
+                data: $('#create-project').serialize(),
+            success: function(data) {
+                // console.log('sukses')
+                // console.log(data);
+              $('#jsonResult').text(JSON.stringify(data)+' {Created}');
+            }
+            });
+        })
+        $('#delete-project').on('submit',(event)=>{
+            event.preventDefault();
+            $.ajax({
+                url:'/api/project',
+                type: 'delete',
+                data: $('#delete-project').serialize(),
+                success: (data)=>{
+                    // console.log(data);
+                    $('#jsonResult').text(JSON.stringify(data)+ ' {Deleted}');
+                }
+            })
+        })
+        $('#submit-issue').on('submit',(event)=>{
+            event.preventDefault();
+            $.ajax({
+                url:'/api/issues/'+$('#project_name_submit').val(),
+                type: 'post',
+                data: $('#submit-issue').serialize(),
+                success: (data)=>{
+                    // console.log(data);
+                    $('#jsonResult').text(JSON.stringify(data));
+                }
+            })
+        })
+        $('#update-issue').on('submit',(event)=>{
+            event.preventDefault();
+            $.ajax({
+                url: '/api/issues/'+$('#project_name_update').val(),
+                type: 'put',
+                data: $('#update-issue').serialize(),
+                success: (data)=>{
+                    $('#jsonResult').text(JSON.stringify(data));
+                }
+            })
+        })
+        $('#delete-issue').on('submit',(event)=>{
+            event.preventDefault();
+            $.ajax({
+                url: '/api/issues/'+$('#project_name_delete').val(),
+                type:'delete',
+                data: $('#delete-issue').serialize(),
+                success: (data)=>{
+                    $('#jsonResult').text(JSON.stringify(data));
+                }
+            })
+        })
+        
+    </script>
+</body>
+</html>
