@@ -7,6 +7,7 @@ var cors        = require('cors');
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
 var runner            = require('./test-runner');
+var ejs = require('ejs');
 const mongoose=require('mongoose');
 var app = express();
 
@@ -14,8 +15,10 @@ const connection_string= 'mongodb+srv://jordy:jordy123@cluster0.zxr52.mongodb.ne
 mongoose.connect(connection_string,({useNewUrlParser: true, useUnifiedTopology: true}))
 .then(()=>{
   console.log('Connected to Database');
-app.use(helmet());
+  app.set('view engine','ejs');
+  app.use(helmet());
 app.use('/public', express.static(process.cwd() + '/public'));
+
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
@@ -28,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.route('/:project/')
   .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/issue.html');
+    console.log(req.query)
   });
 
 //Index page (static HTML)
@@ -48,7 +52,7 @@ app.use(function(req, res, next) {
     .type('text')
     .send('Not Found');
 });
-process.env.NODE_ENV='test';
+// process.env.NODE_ENV='test';
 //Start our server and tests!
 app.listen(process.env.PORT || 3000, function () {
   console.log("Listening on port " + process.env.PORT);

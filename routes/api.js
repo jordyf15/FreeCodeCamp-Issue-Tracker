@@ -20,6 +20,7 @@ module.exports = function (app) {
   app.route('/api/issues/:project')
   
     .get(function (req, res){
+      //req.query: issue_title,issue_text,created_by,assigned_to,status_text,created_on,updated_on, open
       var projectSearch = req.params.project;
       var arrayIssue=[];
       project.findOne({projectName: projectSearch})
@@ -28,6 +29,29 @@ module.exports = function (app) {
           res.send("Project not Found")
         }else{
           arrayIssue=result.issues;
+          arrayIssue.forEach((ele,index)=>{
+            if(ele.issue_title!=req.query.issue_title && req.query.issue_title!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.issue_text!=req.query.issue_text && req.query.issue_text!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.created_by!=req.query.created_by && req.query.created_by!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.assigned_to!=req.query.assigned_to && req.query.assigned_to!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.status_text!=req.query.status_text && req.query.status_text!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.created_on<new Date(req.query.created_on_from) && req.query.created_on_from!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.created_on>new Date(req.query.created_on_to) && req.query.created_on_to!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.updated_on<new Date(req.query.updated_on_from) && req.query.updated_on_from!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.updated_on>new Date(req.query.updated_on_to) && req.query.updated_on_to!=null){
+              arrayIssue.slice(index,1);
+            }else if(ele.open!=req.query.open && req.query.open!=null){
+              arrayIssue.slice(index,1);
+            }
+          })
           res.send(arrayIssue);
         }
       })

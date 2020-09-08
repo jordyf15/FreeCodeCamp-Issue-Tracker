@@ -24,12 +24,13 @@
                 </form>
                 <form class="form-elements" id="project-issue">
                     <a>View Project's Issue</a>
-                    <input type="text" placeholder="name" name="project_name" required>
-                    <button>View</button>
+                    <input type="text" placeholder="name" name="project_name" id="project_name_view" required>
+                    <input type="text" name="test thing">
+                    <button type="submit">View</button>
                 </form>
                 <div class="form-elements" id="view-projects">
                     <a>View All Projects</a>
-                    <button>View Projects</button>
+                    <button type="submit">View Projects</button>
                 </div>
             </div>
             <div id="form-issue-container1">
@@ -140,7 +141,7 @@
                     $('#jsonResult').text(JSON.stringify(data));
                 }
             })
-        })
+        }) 
         
     </script>
 </body>
