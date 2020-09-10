@@ -36,9 +36,9 @@ body{
 #view-projects{
     border-top: none;
 }
-#project-issue{
+/* #project-issue{
     border-top: none;
-}
+} */
 #delete-issue{
     border-top: none;
 }
