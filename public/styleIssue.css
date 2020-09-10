@@ -1,0 +1,19 @@
+body{
+    margin: 0px;
+    background-color: #485460;
+}
+.issue{
+    border: solid;
+    border-color: #1e272e;
+    width: 60vw;
+    margin: 25px 0px 25px 0px;
+}
+.open{
+    background-color: #808e9b;
+}
+.closed{
+    background-color: #596275;
+}
+#projectTitle{
+    text-align: center;
+}

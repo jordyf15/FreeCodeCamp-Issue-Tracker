@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to HyperDev!</title>
-    <meta name="description" content="A cool thing made with HyperDev">
+    <title>Issues</title>
+    <meta name="description" content="A thing made by Jordy Ferdian">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/public/style.css">
+    <link rel="stylesheet" href="/public/styleIssue.css">
   </head>
   <body>
     <header>
@@ -39,6 +39,87 @@
       $(function() {
         var currentProject = window.location.pathname.replace(/\//g, "");;
         var url = "/api/issues/"+currentProject;
+        var queryCount=0;
+        //req.query: issue_title,issue_text,created_by,assigned_to,status_text,created_on&_from_to,updated_on&_from_to, open
+        if('<%= query.issue_title%>'){//query issue_title
+            if(queryCount==0){
+                url+='?';//before adding query we need ?
+            }
+            url+='issue_title=<%= query.issue_title%>'
+            queryCount++;
+        }
+        if('<%= query.issue_text%>'){//query.issue_text
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='issue_text=<%= query.issue_text%>'
+        }
+        if('<%= query.created_by%>'){//query.created_by
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='created_by=<%= query.created_by%>'
+        }
+        if('<%= query.assigned_to%>'){//query.assigned_to
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='assigned_to=<%= query.assigned_to%>'
+        }
+        if('<%= query.status_text%>'){//query.status_text
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='status_text=<%= query.status_text%>'
+        }
+        if('<%= query.created_on_from%>'){//query.created_on_from
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='created_on_from=<%= query.created_on_from%>'
+        }
+        if('<%= query.created_on_to%>'){//query.created_on_to
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='created_on_to=<%= query.created_on_to%>'
+        }
+        if('<%= query.updated_on_from%>'){//query.updated_on_from
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='updated_on_from=<%= query.updated_on_from%>'
+        }
+        if('<%= query.updated_on_to%>'){//query.updated_on_to
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='updated_on_to=<%= query.updated_on_to%>'
+        }
+        if('<%= query.open%>'){//query.open
+            if(queryCount==0){
+                url+='?'
+            }else if(queryCount>0){
+                url+='&'
+            }
+            url+='open=<%= query.open%>'
+        }
         $('#projectTitle').text('All issues for: '+currentProject)
         $.ajax({
           type: "GET",
@@ -47,7 +128,7 @@
           {
             var issues= [];
             data.forEach(function(ele) {
-              console.log(ele);
+              // console.log(ele);
               var openstatus;
               (ele.open) ? openstatus = 'open' : openstatus = 'closed';
               var single = [
@@ -57,7 +138,7 @@
                 '<br>',
                 '<p>'+ele.issue_text+'</p>',
                 '<p>'+ele.status_text+'</p>',
-                '<br>',
+            
                 '<p class="id"><b>Created by:</b> '+ele.created_by+'  <b>Assigned to:</b> '+ele.assigned_to,
                 '<p class="id"><b>Created on:</b> '+ele.created_on+'  <b>Last updated:</b> '+ele.updated_on,
                 '<br><a href="#" class="closeIssue" id="'+ele._id+'">close?</a> <a href="#" class="deleteIssue" id="'+ele._id+'">delete?</a>',
@@ -93,11 +174,14 @@
         });
         $('#issueDisplay').on('click','.deleteIssue', function(e) {
           var url = "/api/issues/"+currentProject;
+          console.log($(this).attr('id'));
           $.ajax({
             type: "DELETE",
             url: url,
-            data: {_id: $(this).attr('id')},
-            success: function(data) { alert(data); window.location.reload(true); }
+            data: {issue_id: $(this).attr('id')},
+            success: function(data) { 
+              alert(data.success); window.location.reload(true); 
+            }
           });
           e.preventDefault();
         });

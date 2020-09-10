@@ -25,12 +25,21 @@
                 <form class="form-elements" id="project-issue">
                     <a>View Project's Issue</a>
                     <input type="text" placeholder="name" name="project_name" id="project_name_view" required>
-                    <input type="text" name="test thing">
+                    <input type="text" placeholder="(opt)Title" id="issue_title_view">
+                    <input type="text" placeholder="(opt)Text" id="issue_text_view">
+                    <Input type="text" placeholder="(opt)Created by" id="created_by_view">
+                    <input type="text" placeholder="(opt)Assigned to" id="assigned_to_view">
+                    <input type="text" placeholder="(opt)Status text" id="status_text_view">
+                    <input type="date" placeholder="(opt)Created on From" id="created_on_from_view">
+                    <input type="date" placeholder="(opt)Created on To" id="created_on_to_view">
+                    <input type="date" placeholder="(opt)Updated on From" id="updated_on_from_view">
+                    <input type="date" placeholder="(opt)Updated on To" id="updated_on_to_view">
+                    <input type="text" placeholder="(opt)Open" id="open_view">
                     <button type="submit">View</button>
                 </form>
                 <div class="form-elements" id="view-projects">
                     <a>View All Projects</a>
-                    <button type="submit">View Projects</button>
+                    <button>View Projects</button>
                 </div>
             </div>
             <div id="form-issue-container1">
@@ -82,7 +91,6 @@
     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
     crossorigin="anonymous"></script>
     <script>
-        //mungkin id test forms bwt issue hrs diganti bwt test
         $('#create-project').on('submit',(e)=>{
             e.preventDefault();//prevent the page from reloading so the jsonResult can be seen
             $.ajax({
@@ -90,8 +98,6 @@
                 type: 'post',
                 data: $('#create-project').serialize(),
             success: function(data) {
-                // console.log('sukses')
-                // console.log(data);
               $('#jsonResult').text(JSON.stringify(data)+' {Created}');
             }
             });
@@ -103,7 +109,6 @@
                 type: 'delete',
                 data: $('#delete-project').serialize(),
                 success: (data)=>{
-                    // console.log(data);
                     $('#jsonResult').text(JSON.stringify(data)+ ' {Deleted}');
                 }
             })
@@ -115,7 +120,6 @@
                 type: 'post',
                 data: $('#submit-issue').serialize(),
                 success: (data)=>{
-                    // console.log(data);
                     $('#jsonResult').text(JSON.stringify(data));
                 }
             })
@@ -142,7 +146,107 @@
                 }
             })
         }) 
-        
+        $('#project-issue').on('submit',(event)=>{
+            var url='/'+$('#project_name_view').val();
+            var queryCount=0;
+            if($('#issue_title_view').val()!=""){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                url+='issue_title='+$('#issue_title_view').val();
+                queryCount++;
+            }
+            if($('#issue_text_view').val()!=""){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+='issue_text='+$('#issue_text_view').val();
+            }
+            if($('#created_by_view').val()!=""){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+='created_by='+$('#created_by_view').val();
+            }
+            if($('#assigned_to_view').val()!=""){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="assigned_to="+$('#assigned_to_view').val();
+            }
+            if($('#status_text_view').val()!=""){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="status_text="+$('#status_text_view').val();
+            }
+            if($('#created_on_from_view').val()!=''){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="created_on_from="+$('#created_on_from_view').val();
+            }
+            if($('#created_on_to_view').val()!=''){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="created_on_to="+$('#created_on_to_view').val();
+            }
+            if($('#updated_on_from_view').val()!=''){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="updated_on_from="+$('#updated_on_from_view').val();
+            }
+            if($('#updated_on_to_view').val()!=''){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+="updated_on_to="+$('#updated_on_to_view').val();
+            }
+            //open viewnya text aja
+            if($('#open_view').val()!=''){
+                if(queryCount==0){
+                    url+='?';
+                }else if(queryCount>0){
+                    url+='&';
+                }
+                queryCount++;
+                url+='open='+$('#open_view').val();
+            }
+            console.log(url);
+            window.location.href=url;
+            event.preventDefault();
+        })
+        $('#view-projects').on('click',(event)=>{
+            window.location.href='/api/projects';
+        })
     </script>
 </body>
 </html>

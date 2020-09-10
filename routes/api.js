@@ -20,7 +20,7 @@ module.exports = function (app) {
   app.route('/api/issues/:project')
   
     .get(function (req, res){
-      //req.query: issue_title,issue_text,created_by,assigned_to,status_text,created_on,updated_on, open
+      //req.query: issue_title,issue_text,created_by,assigned_to,status_text,created_on&_from_to,updated_on&_from_to, open
       var projectSearch = req.params.project;
       var arrayIssue=[];
       project.findOne({projectName: projectSearch})
@@ -29,29 +29,32 @@ module.exports = function (app) {
           res.send("Project not Found")
         }else{
           arrayIssue=result.issues;
-          arrayIssue.forEach((ele,index)=>{
-            if(ele.issue_title!=req.query.issue_title && req.query.issue_title!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.issue_text!=req.query.issue_text && req.query.issue_text!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.created_by!=req.query.created_by && req.query.created_by!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.assigned_to!=req.query.assigned_to && req.query.assigned_to!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.status_text!=req.query.status_text && req.query.status_text!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.created_on<new Date(req.query.created_on_from) && req.query.created_on_from!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.created_on>new Date(req.query.created_on_to) && req.query.created_on_to!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.updated_on<new Date(req.query.updated_on_from) && req.query.updated_on_from!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.updated_on>new Date(req.query.updated_on_to) && req.query.updated_on_to!=null){
-              arrayIssue.slice(index,1);
-            }else if(ele.open!=req.query.open && req.query.open!=null){
-              arrayIssue.slice(index,1);
+          var updated_on_to;
+          var created_on_to;
+          for(let i =arrayIssue.length-1;i>=0;i--){//filter with query
+            if(req.query.created_on_to!=undefined){//date start in 12.00am which might not be good for some filter
+              created_on_to=new Date(req.query.created_on_to);
+              created_on_to.setDate(created_on_to.getDate()+1);
             }
-          })
+            if(req.query.updated_on_to!=undefined){
+              updated_on_to=new Date(req.query.updated_on_to);
+              updated_on_to.setDate(updated_on_to.getDate()+1);
+            }
+            if(arrayIssue[i].issue_title!=req.query.issue_title && req.query.issue_title!=undefined ||
+              arrayIssue[i].issue_text!=req.query.issue_text && req.query.issue_text!=undefined ||
+              arrayIssue[i].created_by!=req.query.created_by && req.query.created_by!=undefined ||
+              arrayIssue[i].assigned_to!=req.query.assigned_to && req.query.assigned_to!=undefined ||
+              arrayIssue[i].status_text!=req.query.status_text && req.query.status_text!=undefined ||
+              arrayIssue[i].created_on<new Date(req.query.created_on_from) && req.query.created_on_from!=undefined ||
+
+              arrayIssue[i].created_on>created_on_to && req.query.created_on_to!=undefined ||
+              arrayIssue[i].updated_on<new Date(req.query.updated_on_from) && req.query.updated_on_from!=undefined||
+
+              arrayIssue[i].updated_on>updated_on_to && req.query.updated_on_to!=undefined ||
+              arrayIssue[i].open!=(/true/i).test(req.query.open) && req.query.open!=undefined){
+              arrayIssue.splice(i,1);
+            }
+          }
           res.send(arrayIssue);
         }
       })
@@ -124,6 +127,10 @@ module.exports = function (app) {
                 issue.open=false;
               }
                 issue.updated_on=new Date();
+            }
+            else if(issue._id==req.body._id){
+              issue.open=JSON.parse(req.body.open);
+              foundIssue=true;
             }
         });
         if(foundIssue==false){//if no issue found
@@ -221,6 +228,23 @@ module.exports = function (app) {
       .catch((err)=>{
         console.error(err);
         res.send('error on deleting new project');
+      })
+    })
+    .get((req,res)=>{
+      var resultArr=[];
+      project.find()
+      .then((result)=>{
+        result.forEach((ele)=>{
+          var resultProject={
+            projectName:ele.projectName,
+            _id:ele._id
+          }
+          resultArr.push(resultProject);
+        })
+        res.send(resultArr);
+      })
+      .catch((err)=>{
+        console.error(err);
       })
     })
     

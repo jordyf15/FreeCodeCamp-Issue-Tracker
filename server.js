@@ -30,8 +30,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Sample front-end
 app.route('/:project/')
   .get(function (req, res) {
-    res.sendFile(process.cwd() + '/views/issue.html');
-    console.log(req.query)
+    // res.sendFile(process.cwd() + '/views/issue.html');
+    res.render(process.cwd()+"/views/issue.ejs",{query: req.query})
+   
   });
 
 //Index page (static HTML)
@@ -40,6 +41,10 @@ app.route('/')
     res.sendFile(process.cwd() + '/views/index2.html');
   });
 
+app.route('/api/projects')
+.get((req,res)=>{
+  res.sendFile(process.cwd()+'/views/projects.html');
+})  
 //For FCC testing purposes
 fccTestingRoutes(app);
 
