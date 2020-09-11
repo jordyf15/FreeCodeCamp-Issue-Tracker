@@ -13,6 +13,6 @@ var projectSchema=new Schema({
         updated_on: Date,
         open: Boolean
     }]
-})
+}, {versionKey: false})
 
 module.exports=mongoose.model('project', projectSchema)
