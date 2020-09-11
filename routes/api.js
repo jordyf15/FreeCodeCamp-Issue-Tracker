@@ -17,7 +17,7 @@ module.exports = function (app) {
 
   app.route('/api/issues/:project')
   
-    .get(function (req, res){
+    .get(function (req, res){//adding new issue to a project
       var projectSearch = req.params.project;
       var arrayIssue=[];
       project.findOne({projectName: projectSearch})
@@ -91,9 +91,8 @@ module.exports = function (app) {
       .catch((err)=>{
         console.error(err);
       })
-    })
-    //urusin update issue 
-    .put(function (req, res){
+    }) 
+    .put(function (req, res){//updating an issue in a project
       var projectSearch = req.params.project;
       var foundIssue=false;
       project.findOne({projectName: projectSearch})
@@ -140,7 +139,6 @@ module.exports = function (app) {
        return result.save()
       })
       .then((result)=>{
-        // res.send(result);
         if(result==null){//not found
           res.send('could not update '+req.body.issue_id);
         }else if(!req.body.issue_title&&
@@ -158,8 +156,7 @@ module.exports = function (app) {
         res.send('saving error');
       })
     })
-    //urusin delete issue
-    .delete(function (req, res){
+    .delete(function (req, res){//for deleting an issue of a project
       var projectSearch = req.params.project;
       var deletedIssue;
       var foundIssue=false;;
@@ -208,7 +205,7 @@ module.exports = function (app) {
     });
 
     app.route('/api/project')
-    .post((req,res)=>{
+    .post((req,res)=>{//post new project
         var newProject = new project ({
           projectName: req.body.project_name
         })
@@ -223,7 +220,7 @@ module.exports = function (app) {
           res.send('error on saving new Project')
         })
     })
-    .delete((req,res)=>{
+    .delete((req,res)=>{//delete new project
       project.findOneAndDelete({projectName: req.body.project_name})
       .then((result)=>{
         console.log(result);
@@ -234,11 +231,11 @@ module.exports = function (app) {
         res.send('error on deleting new project');
       })
     })
-    .get((req,res)=>{
+    .get((req,res)=>{//get all project
       var resultArr=[];
       project.find()
       .then((result)=>{
-        result.forEach((ele)=>{
+        result.forEach((ele)=>{//we only want the list of all project excluding their issues
           var resultProject={
             projectName:ele.projectName,
             _id:ele._id

@@ -84,11 +84,12 @@ $(function() {
         url+='open='+$('#issueScript').attr('query.open')
     }
     $('#projectTitle').text('All issues for: '+currentProject)
-    $.ajax({
+    $.ajax({//getting all of the issue in the project
       type: "GET",
       url: url,
       success: function(data)
       {
+          //rendering html elements for each issue
         var issues= [];
         data.forEach(function(ele) {
           var openstatus;
@@ -113,7 +114,7 @@ $(function() {
       }
     });
     
-    $('#newIssue').submit(function(e){
+    $('#newIssue').submit(function(e){//creating a new issue in the project
       e.preventDefault();
       $(this).attr('action', "/api/issues/" + currentProject);
       $.ajax({
@@ -124,7 +125,7 @@ $(function() {
       });
     });
     
-    $('#issueDisplay').on('click','.closeIssue', function(e) {
+    $('#issueDisplay').on('click','.closeIssue', function(e) {//close the selected issue
       var url = "/api/issues/"+currentProject;
       $.ajax({
         type: "PUT",
@@ -134,7 +135,7 @@ $(function() {
       });
       e.preventDefault();
     });
-    $('#issueDisplay').on('click','.deleteIssue', function(e) {
+    $('#issueDisplay').on('click','.deleteIssue', function(e) {//deletes the selected issue
       var url = "/api/issues/"+currentProject;
       console.log($(this).attr('id'));
       $.ajax({

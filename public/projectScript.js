@@ -1,4 +1,4 @@
-$.ajax({
+$.ajax({//get all list of project
     url: '/api/project',
     type:'get',
     success: (data)=>{
@@ -19,7 +19,7 @@ $.ajax({
         $('#projectDisplay').html(projects.join(''));
     }
 })
-$('#projectDisplay').on('click','.view-issues', function(event) {
+$('#projectDisplay').on('click','.view-issues', function(event) {//redirect to view issue of the selected project
     console.log($(this).attr('id'));
     var url='/'+$(this).attr('id');
     window.location.href=url;

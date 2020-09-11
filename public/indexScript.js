@@ -1,4 +1,4 @@
-$('#create-project').on('submit',(e)=>{
+$('#create-project').on('submit',(e)=>{//handling the create-project form
     e.preventDefault();//prevent the page from reloading so the jsonResult can be seen
     $.ajax({
         url: '/api/project',
@@ -9,7 +9,7 @@ $('#create-project').on('submit',(e)=>{
     }
     });
 })
-$('#delete-project').on('submit',(event)=>{
+$('#delete-project').on('submit',(event)=>{//handling delete-project form
     event.preventDefault();
     $.ajax({
         url:'/api/project',
@@ -20,7 +20,7 @@ $('#delete-project').on('submit',(event)=>{
         }
     })
 })
-$('#submit-issue').on('submit',(event)=>{
+$('#submit-issue').on('submit',(event)=>{//handling the submit-issue form
     event.preventDefault();
     $.ajax({
         url:'/api/issues/'+$('#project_name_submit').val(),
@@ -31,7 +31,7 @@ $('#submit-issue').on('submit',(event)=>{
         }
     })
 })
-$('#update-issue').on('submit',(event)=>{
+$('#update-issue').on('submit',(event)=>{//handling the update-issue form
     event.preventDefault();
     $.ajax({
         url: '/api/issues/'+$('#project_name_update').val(),
@@ -42,7 +42,7 @@ $('#update-issue').on('submit',(event)=>{
         }
     })
 })
-$('#delete-issue').on('submit',(event)=>{
+$('#delete-issue').on('submit',(event)=>{//handling the delete-issue form 
     event.preventDefault();
     $.ajax({
         url: '/api/issues/'+$('#project_name_delete').val(),
@@ -53,9 +53,10 @@ $('#delete-issue').on('submit',(event)=>{
         }
     })
 }) 
-$('#project-issue').on('submit',(event)=>{
+$('#project-issue').on('submit',(event)=>{//handling the project-issue form
     var url='/'+$('#project_name_view').val();
     var queryCount=0;
+    //this is to set the query for view filter
     if($('#issue_title_view').val()!=""){
         if(queryCount==0){
             url+='?';
@@ -137,7 +138,6 @@ $('#project-issue').on('submit',(event)=>{
         queryCount++;
         url+="updated_on_to="+$('#updated_on_to_view').val();
     }
-    //open viewnya text aja
     if($('#open_view').val()!=''){
         if(queryCount==0){
             url+='?';
@@ -151,6 +151,6 @@ $('#project-issue').on('submit',(event)=>{
     window.location.href=url;
     event.preventDefault();
 })
-$('#view-projects').on('click',(event)=>{
+$('#view-projects').on('click',(event)=>{//get all list of project in db
     window.location.href='/api/projects';
 })

@@ -13,6 +13,6 @@ var projectSchema=new Schema({
         updated_on: Date,
         open: Boolean
     }]
-}, {versionKey: false})
+}, {versionKey: false})//to avoid versioning error when updating a document using save()
 
 module.exports=mongoose.model('project', projectSchema)
