@@ -38,7 +38,7 @@ app.route('/:project/')
 //Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
-    res.sendFile(process.cwd() + '/views/index2.html');
+    res.sendFile(process.cwd() + '/views/index.html');
   });
 
 app.route('/api/projects')
